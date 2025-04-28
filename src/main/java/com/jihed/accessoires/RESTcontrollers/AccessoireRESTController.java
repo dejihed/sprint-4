@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jihed.accessoires.dto.AccessoireDTO;
 import com.jihed.accessoires.entities.Accessoire;
 import com.jihed.accessoires.service.AccessoireService;
 
@@ -22,25 +23,25 @@ public class AccessoireRESTController {
 	AccessoireService accessoireService;
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public List<Accessoire> getAllAccessoire(){
+	public List<AccessoireDTO> getAllAccessoire(){
 		return accessoireService.getAllAccessoire();
 	}
 	
 	@RequestMapping(value="/{id}",method = RequestMethod.GET) 
-	public Accessoire getAccessoireById(@PathVariable("id") Long id)
+	public AccessoireDTO getAccessoireById(@PathVariable("id") Long id)
 	{  
 		return accessoireService.getAccessoire(id); 
 	} 
 	
 	@RequestMapping(method = RequestMethod.POST) 
-	public Accessoire createProduit(@RequestBody Accessoire accessoire) 
+	public AccessoireDTO createAccessoire(@RequestBody AccessoireDTO accessoireDTO) 
 	{ 
-		return accessoireService.saveAccessoire(accessoire); 
+		return accessoireService.saveAccessoire(accessoireDTO); 
 	} 
 	
 	@RequestMapping(method = RequestMethod.PUT) 
-	public Accessoire updateAccessoire(@RequestBody Accessoire accessoire) { 
-	return accessoireService.updateAccessoire(accessoire); 
+	public AccessoireDTO updateAccessoire(@RequestBody AccessoireDTO accessoireDTO) { 
+	return accessoireService.updateAccessoire(accessoireDTO); 
 	} 
 	
 	@RequestMapping(value="/{id}",method = RequestMethod.DELETE) 

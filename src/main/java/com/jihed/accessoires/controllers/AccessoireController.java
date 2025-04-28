@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.jihed.accessoires.dto.AccessoireDTO;
 import com.jihed.accessoires.entities.Accessoire;
 import com.jihed.accessoires.entities.Marque;
 import com.jihed.accessoires.service.AccessoireService;
@@ -58,7 +59,7 @@ public class AccessoireController {
 
 
     @RequestMapping("/saveAccessoire") 
-    public String saveAccessoire(@Valid Accessoire accessoire, BindingResult bindingResult,
+    public String saveAccessoire(@Valid AccessoireDTO accessoire, BindingResult bindingResult,
     		@RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "2") int size) 
     { 

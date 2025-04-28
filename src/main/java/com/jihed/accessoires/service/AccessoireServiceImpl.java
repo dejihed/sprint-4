@@ -1,12 +1,16 @@
 package com.jihed.accessoires.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.jihed.accessoires.dto.AccessoireDTO;
 import com.jihed.accessoires.entities.Accessoire;
 import com.jihed.accessoires.entities.Marque;
 import com.jihed.accessoires.repos.AccessoireRepository;
@@ -16,19 +20,22 @@ import com.jihed.accessoires.repos.MarqueRepository;
 public class AccessoireServiceImpl implements AccessoireService{
 
 	@Autowired
+	ModelMapper modelMapper;
+	
+	@Autowired
 	AccessoireRepository accessoireRepository;
 	
 	@Autowired
 	MarqueRepository marqueRepository;
 	
 	@Override
-	public Accessoire saveAccessoire(Accessoire a) {
-		return accessoireRepository.save(a);
+	public AccessoireDTO saveAccessoire(AccessoireDTO a) {
+		return convertEntityToDto (accessoireRepository.save(convertDtoToEntity(a)));
 	}
 
 	@Override
-	public Accessoire updateAccessoire(Accessoire a) {
-		return accessoireRepository.save(a);
+	public AccessoireDTO updateAccessoire(AccessoireDTO a) {
+		return convertEntityToDto(accessoireRepository.save(convertDtoToEntity(a)));
 	}
 
 	@Override
@@ -42,13 +49,15 @@ public class AccessoireServiceImpl implements AccessoireService{
 	}
 
 	@Override
-	public Accessoire getAccessoire(Long id) {
-		return accessoireRepository.findById(id).get();
+	public AccessoireDTO getAccessoire(Long id) {
+		return convertEntityToDto (accessoireRepository.findById(id).get());
 	}
 
 	@Override
-	public List<Accessoire> getAllAccessoire() {
-		return accessoireRepository.findAll();
+	public List<AccessoireDTO> getAllAccessoire() {
+		return accessoireRepository.findAll().stream()
+				.map(this::convertEntityToDto)
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -96,5 +105,51 @@ public class AccessoireServiceImpl implements AccessoireService{
 	 public List<Marque> getAllMarques() { 
 	  return marqueRepository.findAll(); 
 	 }
+	
+	public AccessoireDTO convertEntityToDto(Accessoire accessoire) {
+		
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+		AccessoireDTO accessoireDTO = modelMapper.map(accessoire, AccessoireDTO.class);
+		
+		return accessoireDTO;
+		/*
+		AccessoireDTO accessoireDTO = new AccessoireDTO();
+		accessoireDTO.setIdAccess(a.getIdAccess());
+		accessoireDTO.setNomAccess(a.getNomAccess());
+		accessoireDTO.setCouleurAccess(a.getCouleurAccess());
+		accessoireDTO.setPrixAccess(a.getPrixAccess());
+		accessoireDTO.setMarque(a.getMarque());
+		return accessoireDTO; 
+		
+		return AccessoireDTO.builder()
+				.idAccess(a.getIdAccess())
+				.nomAccess(a.getNomAccess())
+				.couleurAccess(a.getCouleurAccess())
+				.prixAccess(a.getPrixAccess())
+				.dateSortieAcess(a.getDateSortieAcess())
+				.marque(a.getMarque())
+				.build();*/
+				
+	}
+
+	@Override
+	public Accessoire convertDtoToEntity(AccessoireDTO accessoireDto) {
+		
+		Accessoire accessoire = new Accessoire();
+		accessoire = modelMapper.map(accessoireDto, Accessoire.class);
+				return accessoire;
+	}
+/*
+		Accessoire accessoire = new Accessoire();
+		accessoire.setIdAccess(accessoireDto.getIdAccess());
+		accessoire.setNomAccess(accessoireDto.getNomAccess());
+		accessoire.setCouleurAccess(accessoireDto.getCouleurAccess());
+		accessoire.setPrixAccess(accessoireDto.getPrixAccess());
+		accessoire.setDateSortieAcess(accessoireDto.getDateSortieAcess());
+		accessoire.setMarque(accessoireDto.getMarque());
+		
+		return null;
+	}*/
+		
 
 }
