@@ -14,9 +14,9 @@ import com.jihed.accessoires.dto.AccessoireDTO;
 import com.jihed.accessoires.entities.Accessoire;
 import com.jihed.accessoires.service.AccessoireService;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
-@CrossOrigin
 public class AccessoireRESTController {
 
 	@Autowired
